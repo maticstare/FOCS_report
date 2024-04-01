@@ -56,6 +56,52 @@
 
 \section{Introduction}
 
+64th IEEE Symposium on Foundations of Computer Science (FOCS) 2023 je uradno ime konference ki je potekala od 6. do 9. novembra 2023. v mestu Santa Cruz (Kalifornija, Združene države Amerike). Njene teme so bile: algoritmi in podatkovne strukture, kriptografija, računska kompleksnost, teorija računalniškega učenja, iskanje informacij in baze podatkov... Oddanih prispevkov je bilo 421 ampak sprejetih samo 142. Vseh 142 je bilo predstavljeno.
 
+\section{Proof of the Clustered Hadwiger Conjecture}
+Preden avtorji dokažejo gručasto Hadwigerjevo domnevo, opišejo naslednje pojme.
+
+
+
+Polni grafi so grafi, v katerih je vsako vozlišče povezano z vsakim drugim vozliščem. Poln graf z $n$ vozlišči označimo $K_n$.                                                           
+Minorji grafa $G$ so podgrafi, ki jih dobimo z brisanjem povezav in vozlišč ter krčenjem povezav $G$.
+Barvanje grafa je preslikava, ki vsakemu vozlišču dodeli barvo.
+Graf je $k$-obarvljiv, ko za njegovo obarvanje porabimo največ $k$ barv.
+Graf je pravilno obarvan, ko ima vsak sosednji par vozlišč med seboj različno barvo.
+Kromatično število grafa $G$ je najmanjše tako število $k$, da je $G$ pravilno obarvan in $k$-obarvljiv.
+
+Hadwigerjeva domneva:
+Naj bo $K_h$ poln graf na $h$ vozliščih.
+Hadwiger je domneval, da je vsak graf brez minorja $K_h$ pravilno $(h - 1)$-obarvljiv.
+
+Monokromatična komponenta obarvanega grafa $G$ so med seboj povezana vozlišča enake barve.
+Gručevje je število vozlišč največje monokromatične komponente obarvanega grafa $G$.
+Gručasto monokromatično število množice grafov je najmanjše tako število $k$, za katerega obstaja število $c$, da je vsak graf iz množice $k$-obarvljiv z gručevjem $c$.
+
+Gručasta Hadwigerjeva domneva(v nadaljevanju izrek 1) trdi, da je vsak graf brez minorja $K_h$ $(h – 1)$-obarvljiv z gručevjem največ neke funkcije $f(h)$. 
+
+Avtorji nadaljujejo z gručastim kromatičnim številom množice grafov brez minorja $K_s,t$, kjer je $K_s,t$ poln bipartitni graf z deli velikosti $t>=s>=1$.
+Izrek2:
+Vsak graf brez minorja $K_s,t$ je $(s+1)$-obarvljiv s gručevjem največ neke funkcije $f(s,t)$.
+S pomočjo izreka 2 dokažejo, da je omenjeno gručasto kromatično število $s+1$.
+
+Avtorji nato izreka 1 in 2 posplošijo na izrek 4:
+Vsak graf brez minorja $J_s,t$ je $(s+1)$-obarvljiv z gručevjem največ $f(s, t)$.
+
+Temu iz dokazanih izrekov Liu-a in Wood-a ter definicije za 'apex' graf, ki ob odvzemu največ 1 vozlišča postane planarni graf, sledi izrek 7:
+Za katerikoli celi števili $t >= s >= 3$ in katerokoli temeljišče grafa $X$, vsak graf $K_{s,t}$ brez podgrafov in minorjev v $X$ je $(s + 1)$-obarvljiv s clusteringom največ $f(s, t, X)$.
+
+Dokazna metoda za izreka 4 in 7 uporablja napredne tehnike teorije grafov za reševanje kompleksnih problemov. Ključna sestavina teh dokazov je uporaba 'teorije strukture produkta grafov' skupaj z izrekom Robertsona in Seymourja, ki obravnava strukturo grafovskih minorjev. To omogoča preoblikovanje planarnih grafov v enostavnejše grafe z omejeno drevesno širino, kar olajša analizo in manipulacijo z njimi.
+
+Pristop je sicer omejen na družine grafov, ki omogočajo močan produkt grafa. Zato se zanašamo na izrek Robertsona in Seymourja, ki razčleni grafe brez določenega vzorca na manjše dele, imenovane "torzi". Te "torzi" so sestavljene iz vdelanega podgrafa na površini, dopolnjenega z vrtinci in temeljišči s prosto okolico, podobno kot drevo kličnih vsot.
+
+
+Pri barvanju določenih vrst grafov sledimo strategiji barvanja "torzij" enega za drugim, pri čemer pazimo, da ne prekrijemo že obarvanih delov y novo barvo. Teorem 4 nam zagotavlja, da lahko uporabimo največ s+1 barv, vendar to ni vedno izvedljivo, zato moramo "torze", ki jih ni mogoče pobarvati v s+1 barvah, združiti v zavese. Za barvanje celotnega grafa preprosto pobarvamo vsako zaveso zaporedno, začevši s tisto, ki vsebuje koreninski "torzo". Pri tem posvečamo pozornost določenim vrstam točk v grafu, imenovanim "temeljišča".
+
+Za dodatno poenostavitev grafa uporabljamo tudi metode, kot sta particioniranje in plastenje, da ohranimo omejenost velikosti presečišč vsakega dela in vsake plasti. Namesto ustvarjanja omejenega grafa količnika drevesne širine, povzdignemo zaveso, da oblikujemo manjši G↑ (G minor) z omejeno drevesno širino. S tem zagotovimo, da G↑ ostane minor od G, s čimer dopolnimo dokazno strategijo za izrek 4.
+
+
+
+Naši rezultati ponujajo konstruktivne dokaze in algoritme polinomskega časa $O(n^c)$, neodvisne od izključenega minorja ali podgrafa, kar omogoča učinkovito obvladovanje K2,t-podgrafov. Izreka 1 in 2 zagotavljata optimalne meje za gručasto kromatsko število neminornih grafov Kh in Ks,t, poleg ključno razvitih definicij in orodij, kot so dekompozicije zavese, dvignjene zavese in kontrakcije. Pričakuje se, da bodo ta orodja uporabna v različnih kontekstih zaradi njihove učinkovitosti pri nadzoru K2,t-podgrafov.
 
 \end{document}
