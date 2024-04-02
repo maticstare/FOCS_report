@@ -48,45 +48,87 @@
 
 % Sections
 
-\begin{abstract}
-    abstract
-\end{abstract}
-
 
 
 \section{Introduction}
+64th IEEE Symposium on Foundations of Computer Science (FOCS) 2023 je uradno ime konference ki je potekala od 6. do 9. novembra 2023. v mestu Santa Cruz (Kalifornija, Združene države Amerike). Njene teme so bile: algoritmi in podatkovne strukture, kriptografija, računska kompleksnost, teorija računalniškega učenja, iskanje informacij in baze podatkov... Med 421 oddanimi prispevki je bilo sprejetih 142.
 
 \section{A Randomized Algorithm for Single-Source Shortest Path on Undirected Real-Weighted Graphs}
 
-Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(V^2)$, kjer je $V$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(V \log V + E)$, kjer je $E$ število povezav. V tem članku so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(E \sqrt{\log V * \log \log V})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. 
+Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(n^2)$, kjer je $n$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(n \log n + m)$, kjer je $m$ število povezav. V tem članku so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(m \sqrt{\log n * \log \log n})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. 
 
-Do nedavnega je bilo ozko grlo pri iskanju SSSP vrsta s prednostjo. Ideja izboljšave je v tem, da v vrsto vnesemo manjše število vozlišč. To dosežemo z tehniko \textit{Bundle Construction}, ki deluje na sledeč način:
+Do nedavnega je bilo ozko grlo pri iskanju SSSP vrsta s prednostjo. Ideja izboljšave je, da v vrsto vnesemo manjše število vozlišč. To dosežemo s tehniko \textit{Bundle Construction}, ki deluje na sledeč način:
 \begin{itemize}
-  \item Iz množice vozlišč $V \setminus \{s\}$ naključno izberemo $R \subseteq V \setminus \{s\}$ z verjetnostjo $\frac{1}{k}$. Na koncu množici $R$ dodamo vozlišče $s$.
-  \item Na vsakem vozlišču $v \notin R$ poženemo Dijkstrin algoritem z začetkom v $v$ dokler iz kopice ne izločimo prvega vozlišča iz $R$, ki je označen z $b(v)$. Ker sta $v$ in $b(v)$ v neposredni bližini, pravimo, da je $v$ \textit{bundled} v $b(v)$.
-  \item Definirajmo $u \in R$. $Bundle(u)$ je množica vseh vozlišč, ki so bundled v $u$. Na ta način unija vseh $Bundle(u_i)$ tvori particijo $V$.
-  \item skip
+  \item Iz prvotne množice vozlišč $V$ naključno izberemo podmnožico $R_1 \subseteq V$, pri čemer je vsako vozlišče vsebovano v $R_1$ z verjetnostjo $\frac{1}{k}$. V množici $R_1$ se nahaja tudi vir $s$.
+  \item Na vsakem vozlišču $v \notin R_1$ poženemo Dijkstrin algoritem z začetkom v $v$.
+  Vsako vozlišče, ki izločimo iz kopice dodamo v urejeno množico $V_{extract}^{(v)}$. Ko naletimo na vozlišče $u \in R_1$, oziroma je moč množice $|V_{extract}^{(v)}| > k \log k$, se Dijkstrin algoritem z začetkom v $v$ zaključi.
+  \item Če je bila moč množice $|V_{extract}^{(v)}| > k \log k$, potem dodamo vozlišče $v$ v množico $R_2$.
+  \item Nastavimo $R := R_1 \cup R_2$ in prvo vozlišče v $V_{extract}^{(v)} \cap R := b(v)$ 
+  \item Z zgornjim rezultatom izračunamo sledeče: $Bundle(u)$ za vsak $u \in R$, $Ball(v)$ za vsak $v \in V \backslash R$ in $dist(v,u)$ za vsak $u \in Ball(v) \cup \{b(v)\}$.
 \end{itemize}
 
-Časovna zahtevnost algoritma $O(m k \log k)$. Z njegovo pomočjo smo pridobili 3 nove množice s pričakovanimi velikostmi:
-\begin{itemize}
-  \item $E[|R|] = O(\frac{m}{k})$.
-  \item $E[|S_v|] = \Theta(k)$.
-  \item $E[|Ball(v)|] = \Omega(k)$.
-\end{itemize}
+Ker je pričakovana moč množice $|R_1| = O(\frac{m}{k})$ algoritem terja časovno zahtevnost $O(mk \log k)$. %Fix
 
-\textit{Bundle Construction} so avtorji uporabili kot osnovo za nov algoritem. Ta deluje na sledeč način:
-Bundle Dijkstra - Ustvarimo tabelo, kjer bomo hranili razdalje vozlišč $v$ od vozlišča $s$, in v Fibonaccijevo kopico vstavimo vsa vozlišča iz $R$.
+Sledi algoritem \textit{Bundle Dijkstra}, ki na osnovi pridobljene množice paketov posodablja razdalje vseh vozlišč do vira. Gre za relaksacijo vozlišč $v \in V \backslash R$.
+
+\textit{Bundle Dijkstra} - Ustvarimo tabelo, kjer bomo hranili razdalje vozlišč $v$ do vozlišča $s$, in v Fibonaccijevo kopico vstavimo vsa vozlišča iz $R$.
 \begin{enumerate}
   \item
-  Ko iz kopice izločimo vozlišče $u$, posodobimo tabelo tako da za vsako vozlišče, ki je zapakirano $u$-ju, najdemo točno razdaljo. To storimo tako, da izberemo minimum izrazov $d(v)$, $d(u) + dist(u,v)$, $d(y) + dist(y,v)$ in $d(z_1) + w_{z1z2} + dist(z_2,v)$
-  %Oz. Posodobimo d(v) glede na d(v), vozlišča v Ball(v) in sosedna vozlišča v ter Ball(v).
+  Ko iz kopice izločimo vozlišče $u$, posodobimo tabelo tako, da za vsako vozlišče $v$, ki je zapakirano vozlišču $u$ najdemo točno razdaljo. To storimo tako, da %izberemo minimum izrazov $d(v)$, $d(u) + dist(u,v)$, $d(y) + dist(y,v)$ in $d(z_1) + w_{z1z2} + dist(z_2,v)$
+  posodobimo $d(v)$ glede na: $d(u)$, vozlišča v $Ball(v)$ in sosednja vozlišča vozlišču $v$ in $Ball(v)$.
   \item
-  Ko je vsako vozlišče x iz Bundle(u) posodobljeno pa posodobimo še sosednja vozlišča $y \in N(x)$ in vozlišča, ki so znotraj Ball(y).
+  Ko je vsako vozlišče $x \in Bundle(u)$ posodobljeno posodobimo še sosednja vozlišča $y \in N(x)$ in vozlišča, ki so znotraj $Ball(y)$.
   \item
-  Ko posodobimo vozlišče, ki ni v množici R, posodobimo še njegovo zapakirano vozlišče b(v) z d(v) + dist(v,b(v)).
-
-
+  Ko posodobimo vozlišče, ki ni v množici $R$, posodobimo še njegovo zapakirano vozlišče $b(v)$ z $d(v) + dist(v,b(v))$.
 \end{enumerate}
+Ker smo v algoritem vstavili le $|R|$ vozlišč, je časovna kompleksnost izločanja elementov iz kopice enaka $O(|R|\log n)$. Poleg izločanja elementov iz kopice nam k časovni kompleksnosti pripomore še zanka skozi vsa vozlišča ${v} \in V \backslash R$, vendar ker v algoritmu preverjamo tudi vozlišča znotraj $Ball(v)$ dobimo končno časovno zahtevnost \textit{Bundle Dijkstra} $O(\frac{m}{k}\log n + mk)$.
+
+Tako je skupna časovna zahtevnost celotnega zasnovanega algoritma enaka $O(\frac{m}{k}\log n + mk \log k)$, ki jo lahko minimiziramo z izbranim $k = \frac{\log n}{\log \log n}$.
+
+\section{Proof of the Clustered Hadwiger Conjecture}
+Preden avtorji dokažejo gručasto Hadwigerjevo domnevo, opišejo naslednje pojme.
+
+
+
+Polni grafi so grafi, v katerih je vsako vozlišče povezano z vsakim drugim vozliščem. Poln graf z $n$ vozlišči označimo $K_n$.\\                                                           
+Minorji grafa $G$ so podgrafi, ki jih dobimo z brisanjem povezav in vozlišč ter krčenjem povezav $G$.\\
+Barvanje grafa je preslikava, ki vsakemu vozlišču dodeli barvo.\\
+Graf je $k$-obarvljiv, ko za njegovo obarvanje porabimo največ $k$ barv.\\
+Graf je pravilno obarvan, ko ima vsak sosednji par vozlišč med seboj različno barvo.\\
+Kromatično število grafa $G$ je najmanjše tako število $k$, da je $G$ pravilno obarvan in $k$-obarvljiv.\\
+
+Hadwigerjeva domneva:\\
+Naj bo $K_h$ poln graf na $h$ vozliščih.\\
+Hadwiger je domneval, da je vsak graf brez minorja $K_h$ pravilno $(h - 1)$-obarvljiv.
+
+Monokromatična komponenta obarvanega grafa $G$ so med seboj povezana vozlišča enake barve.\\
+Gručevje je število vozlišč največje monokromatične komponente obarvanega grafa $G$.\\
+Gručasto monokromatično število množice grafov je najmanjše tako število $k$, za katerega obstaja število $c$, da je vsak graf iz množice $k$-obarvljiv z gručevjem $c$.
+
+Gručasta Hadwigerjeva domneva(v nadaljevanju izrek 1) trdi, da je vsak graf brez minorja $K_h$ $(h – 1)$-obarvljiv z gručevjem največ neke funkcije $f(h)$.\\
+
+Avtorji nadaljujejo z gručastim kromatičnim številom množice grafov brez minorja $K_s,t$, kjer je $K_s,t$ poln bipartitni graf z deli velikosti $t>=s>=1$.\\
+Izrek2:\\
+Vsak graf brez minorja $K_s,t$ je $(s+1)$-obarvljiv s gručevjem največ neke funkcije $f(s,t)$.\\
+S pomočjo izreka 2 dokažejo, da je omenjeno gručasto kromatično število $s+1$.
+\\
+Nato izreka 1 in 2 posplošijo na izrek 4:\\
+Vsak graf brez minorja $J_s,t$ je $(s+1)$-obarvljiv z gručevjem največ $f(s, t)$.
+\\
+Temu iz dokazanih izrekov Liu-a in Wood-a ter definicije za 'apex' graf, ki ob odvzemu največ 1 vozlišča postane planarni graf, sledi izrek 7:\\
+Za katerikoli celi števili $t >= s >= 3$ in katerokoli temeljišče grafa $X$, vsak graf $K_{s,t}$ brez podgrafov in minorjev v $X$ je $(s + 1)$-obarvljiv s clusteringom največ $f(s, t, X)$.\\
+
+Dokazna metoda za izreka 4 in 7 uporablja napredne tehnike teorije grafov za reševanje kompleksnih problemov. Ključna sestavina teh dokazov je uporaba 'teorije strukture produkta grafov' skupaj z izrekom Robertsona in Seymourja, ki obravnava strukturo grafovskih minorjev. To omogoča preoblikovanje planarnih grafov v enostavnejše grafe z omejeno drevesno širino, kar olajša analizo in manipulacijo z njimi.
+
+Pristop je sicer omejen na družine grafov, ki omogočajo močan produkt grafa. Zato se zanašamo na izrek Robertsona in Seymourja, ki razčleni grafe brez določenega vzorca na manjše dele, imenovane "torzi". Te "torzi" so sestavljene iz vdelanega podgrafa na površini, dopolnjenega z vrtinci in temeljišči s prosto okolico, podobno kot drevo kličnih vsot.
+
+
+Pri barvanju določenih vrst grafov sledimo strategiji barvanja "torzij" enega za drugim, pri čemer pazimo, da ne prekrijemo že obarvanih delov y novo barvo. Teorem 4 nam zagotavlja, da lahko uporabimo največ s+1 barv, vendar to ni vedno izvedljivo, zato moramo "torze", ki jih ni mogoče pobarvati v s+1 barvah, združiti v zavese. Za barvanje celotnega grafa preprosto pobarvamo vsako zaveso zaporedno, začevši s tisto, ki vsebuje koreninski "torzo". Pri tem posvečamo pozornost določenim vrstam točk v grafu, imenovanim "temeljišča".
+
+Za dodatno poenostavitev grafa uporabljamo tudi metode, kot sta particioniranje in plastenje, da ohranimo omejenost velikosti presečišč vsakega dela in vsake plasti. Namesto ustvarjanja omejenega grafa količnika drevesne širine, povzdignemo zaveso, da oblikujemo manjši G↑ (G minor) z omejeno drevesno širino. S tem zagotovimo, da G↑ ostane minor od G, s čimer dopolnimo dokazno strategijo za izrek 4.
+
+
+
+Naši rezultati ponujajo konstruktivne dokaze in algoritme polinomskega časa $O(n^c)$, neodvisne od izključenega minorja ali podgrafa, kar omogoča učinkovito obvladovanje K2,t-podgrafov. Izreka 1 in 2 zagotavljata optimalne meje za gručasto kromatsko število neminornih grafov Kh in Ks,t, poleg ključno razvitih definicij in orodij, kot so dekompozicije zavese, dvignjene zavese in kontrakcije. Pričakuje se, da bodo ta orodja uporabna v različnih kontekstih zaradi njihove učinkovitosti pri nadzoru K2,t-podgrafov.
 
 \end{document}
