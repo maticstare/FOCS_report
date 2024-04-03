@@ -84,7 +84,29 @@ Sledi algoritem \textit{Bundle Dijkstra}, ki na osnovi pridobljene množice pake
 Ker smo v algoritem vstavili le $|R|$ vozlišč, je časovna kompleksnost izločanja elementov iz kopice enaka $O(|R|\log n)$. Poleg izločanja elementov iz kopice nam k časovni kompleksnosti pripomore še zanka skozi vsa vozlišča ${v} \in V \backslash R$, vendar ker v algoritmu preverjamo tudi vozlišča znotraj $Ball(v)$ dobimo končno časovno zahtevnost \textit{Bundle Dijkstra} $O(\frac{m}{k}\log n + mk)$.
 
 Tako je skupna časovna zahtevnost celotnega zasnovanega algoritma enaka $O(\frac{m}{k}\log n + mk \log k)$, ki jo lahko minimiziramo z izbranim $k = \frac{\log n}{\log \log n}$.
+\section{Polynomial-Time Pseudodeterministic Construction of Primes}
+Gat in Goldwasser sta postavila vprašanje ali je mogoče izračunati praštevila psevdoderministično v polinomskem času. Naključnostni algoritem je psevdodeterminističen, če izračuna fiksno kanonično rešitev za iskalni problem z visoko verjetnostjo. Članek predstavlja rešitev na ta problem v neskončno-pogostem režimu. Predstavlja brezpogojni polinomski naključnostni algoritem B, tako da za neskončno mnogo vrednosti n, $B(1^n)$ izračuna kanonično n-bitno praštevilo $p_n$ z visoko verjetnostjo. Splošneje za vsako gosto lastnost Q nizov, ki jo je mogoče določiti v polinomskem času, obstaja neskončno-pogosta psevdodeterministična polinomska konstrukcija nizov, ki zadovoljijo Q. Pristop presega subeksponentno časovno konstrukcijo, predlagano s strani Oliveire in Santhanama. Vključuje različne inovativne koncepte, kot je nova tehnika zagona za psevdodeterministične konstrukcije, ter kvalitativno izboljšanje okvira enakomerne trdnosti-naključnosti, ki sta ga predstavila Chen in Tell, s pomočjo variante generatorja Shaltiel-Umans.
 
+\subsection{Rezultati}
+Glavni izrek določa pogoje, pod katerimi probabilistični algoritem s polinomskim časom, skupaj s sekvenco nizov iz določenega jezika, zagotavlja specifične verjetnostne izide. Z uporabo tega izreka na jeziku praštevil članek predstavi naključni algoritem s polinomskim časom, ki z visoko verjetnostjo zanesljivo proizvaja praštevila za neskončno mnogo vhodnih dolžin, prekašajoč prejšnje metode subexponentne časovne zahtevnosti.
+
+\textbf{Izrek 1 (Neskončno pogosto polinomski čas Psevdodeterminističnih konstrukcij).} Naj bo \( Q \subseteq \{0, 1\}^* \) jezik z naslednjimi lastnostmi:
+\begin{itemize}
+    \item \textbf{(Gostota.)} obstaja konstanta \( \rho \geq 1 \) tako, da za vsak \( n \in \mathbb{N}_{\geq 1} \), \( Q_n \triangleq Q \cap \{0, 1\}^n \) ustreza \( |Q_n| \geq n^{-\rho} \cdot 2^n \); in
+    \item \textbf{(Preprostost.)} obstaja determinističen polinomski čas algoritem \( A_Q \), ki odloča, ali vhod \( x \in \{0, 1\}^* \) pripada \( Q \).
+\end{itemize}
+Nato obstaja verjetnostni polinomski čas algoritem \( B \) in zaporedje \( \{x_n\}_{n \in \mathbb{N}_{\geq 1}} \) nizov \( n \)-bitnih nizov v \( Q \) tako, da veljajo naslednji pogoji:
+\begin{enumerate}
+    \item Pri vsaki vhodni dolžini \( n \in \mathbb{N}_{\geq 1} \), \( \Pr[B(1^n) \notin \{x_n, \perp\}] \leq 2^{-n} \).
+    \item Na neskončno mnogih vhodnih dolžinah \( n \in \mathbb{N}_{\geq 1} \), \( \Pr[B(1^n) = x_n] \geq 1 - 2^{-n} \).
+\end{enumerate}
+
+
+\subsection*{Posledice}
+\begin{itemize}
+    \item Obstaja verjetnostni polinomski algoritem B, ki za neskončno mnogo vrednosti $n$ izpiše kanonično n-bitno praštevilo $p_n$ z visoko verjetnostjo. To je dokaz moči teorije kompleksnosti v reševanju problemov, ki se zdijo biti o številski teoriji.
+    \item Obstaja konstanta $c \geq 1$, tako da za $t(n) = n^c$ velja naslednje: Za vsak $m \geq 1$ obstaja $n > m$ in $n$-bitno praštevilo $p_n$, pri čemer je $rK^{t}(p_n) \leq \log(n) + O(1)$. Drugače povedano, obstaja neskončno mnogo praštevil, ki imajo zelo kratke učinkovite opise.
+\end{itemize}
 \section{Proof of the Clustered Hadwiger Conjecture}
 Preden avtorji dokažejo gručasto Hadwigerjevo domnevo, opišejo naslednje pojme.\\
 
