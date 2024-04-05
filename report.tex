@@ -1,3 +1,4 @@
+
 \documentclass{article}
 
 \usepackage{amsmath}
@@ -62,19 +63,19 @@
 
 \section{A Randomized Algorithm for Single-Source Shortest Path on Undirected Real-Weighted Graphs}
 
-Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(n^2)$, kjer je $n$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(n \log n + m)$, kjer je $m$ število povezav. V tem članku~\cite{duan2023randomized} so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(m \sqrt{\log n * \log \log n})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. 
+Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(n^2)$, kjer je $n$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(n \log n + m)$, kjer je $m$ število povezav. V tem članku~\cite{duan2023randomized} so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(m \sqrt{\log n * \log \log n})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. Poleg tega je vneseni graf $G$ potrebno spremeniti v graf s konstantnimi stopnjami~\cite{frederickson1983data}, kar pomeni da ima nov dobljeni graf $G'$ $O(m)$ vozlišč in povezav.
 
 Do nedavnega je bilo ozko grlo pri iskanju SSSP vrsta s prednostjo. Ideja izboljšave je, da v vrsto vnesemo manjše število vozlišč. To dosežemo s tehniko \textit{Bundle Construction}, ki deluje na sledeč način:
 \begin{itemize}
   \item Iz prvotne množice vozlišč $V$ naključno izberemo podmnožico $R_1 \subseteq V$, pri čemer je vsako vozlišče vsebovano v $R_1$ z verjetnostjo $\frac{1}{k}$. V množici $R_1$ se nahaja tudi vir $s$.
-  \item Na vsakem vozlišču $v \notin R_1$ poženemo Dijkstrin algoritem z začetkom v $v$.
-  Vsako vozlišče, ki izločimo iz kopice dodamo v urejeno množico $V_{extract}^{(v)}$. Ko naletimo na vozlišče $u \in R_1$, oziroma je moč množice $|V_{extract}^{(v)}| > k \log k$, se Dijkstrin algoritem z začetkom v $v$ zaključi.
+  \item Na vsakem $v \notin R_1$ poženemo Dijkstrin algoritem z začetkom v $v$.
+  Vsako vozlišče, ki izločimo iz kopice dodamo v urejeno množico $V_{extract}^{(v)}$. Ko naletimo na $u \in R_1$, oziroma je moč množice $|V_{extract}^{(v)}| > k \log k$, se Dijkstrin algoritem z začetkom v $v$ zaključi.
   \item Če je bila moč množice $|V_{extract}^{(v)}| > k \log k$, potem dodamo vozlišče $v$ v množico $R_2$.
-  \item Nastavimo $R := R_1 \cup R_2$ in prvo vozlišče v $V_{extract}^{(v)} \cap R := b(v)$ 
+  \item Nastavimo $R := R_1 \cup R_2$ in prvo vozlišče v $V_{extract}^{(v)} \cap R =: b(v)$ 
   \item Z zgornjim rezultatom izračunamo sledeče: $Bundle(u)$ za vsak $u \in R$, $Ball(v)$ za vsak $v \in V \backslash R$ in $dist(v,u)$ za vsak $u \in Ball(v) \cup \{b(v)\}$.
 \end{itemize}
 
-Ker je pričakovana moč množice $|R_1| = O(\frac{m}{k})$, algoritem terja časovno zahtevnost $O(mk \log k)$.
+Ker je pričakovana moč množice $|V_{extract}^{(v)}| = O(k)$ za vsak $v$ in je v grafu $G'$ $O(m)$ vozlišč, algoritem terja časovno zahtevnost $O(mk \log k)$.
 
 Sledi algoritem \textit{Bundle Dijkstra}, ki na osnovi pridobljene množice paketov posodablja razdalje vseh vozlišč do vira. Gre za relaksacijo vozlišč $v \in V \backslash R$.
 
@@ -87,9 +88,9 @@ Sledi algoritem \textit{Bundle Dijkstra}, ki na osnovi pridobljene množice pake
   \item
   Ko posodobimo vozlišče, ki ni v množici $R$, posodobimo še njegovo zapakirano vozlišče $b(v)$ z $d(v) + dist(v,b(v))$.
 \end{enumerate}
-Ker smo v algoritem vstavili le $|R|$ vozlišč, je časovna kompleksnost izločanja elementov iz kopice enaka $O(|R|\log n)$. Poleg izločanja elementov iz kopice nam k časovni kompleksnosti pripomore še zanka skozi vsa vozlišča ${v} \in V \backslash R$, vendar ker v algoritmu preverjamo tudi vozlišča znotraj $Ball(v)$ dobimo končno časovno zahtevnost \textit{Bundle Dijkstra} $O(\frac{m}{k}\log n + mk)$.
+Ker je v algoritmu vstavljenih le $|R|$ vozlišč, je časovna kompleksnost izločanja elementov iz kopice enaka $O(|R|\log n)$. Poleg izločanja elementov iz kopice, k časovni kompleksnosti pripomore še zanka skozi vsa vozlišča ${v} \in V \backslash R$, vendar ker se v algoritmu preverjajo tudi vozlišča znotraj $Ball(v)$ je končna časovna zahtevnost \textit{Bundle Dijkstra} $O(\frac{m}{k}\log n + mk)$.
 
-Tako je skupna časovna zahtevnost celotnega zasnovanega algoritma enaka $O(\frac{m}{k}\log n + mk \log k)$, ki jo lahko minimiziramo z izbranim $k = \frac{\log n}{\log \log n}$.
+Tako je skupna časovna zahtevnost celotnega zasnovanega algoritma enaka $O(\frac{m}{k}\log n + mk \log k)$, ki jo je možno minimizirati z izbranim $k = \frac{\log n}{\log \log n}$.
 \section{Polynomial-Time Pseudodeterministic Construction of Primes}
 Gat in Goldwasser sta postavila vprašanje ali je mogoče izračunati praštevila psevdoderministično v polinomskem času. Naključnostni algoritem je psevdodeterminističen, če izračuna fiksno kanonično rešitev za iskalni problem z visoko verjetnostjo. Članek predstavlja rešitev na ta problem v neskončno-pogostem režimu. Predstavlja brezpogojni polinomski naključnostni algoritem B, tako da za neskončno mnogo vrednosti n, $B(1^n)$ izračuna kanonično n-bitno praštevilo $p_n$ z visoko verjetnostjo. Splošneje za vsako gosto lastnost Q nizov, ki jo je mogoče določiti v polinomskem času, obstaja neskončno-pogosta psevdodeterministična polinomska konstrukcija nizov, ki zadovoljijo Q. Pristop presega subeksponentno časovno konstrukcijo, predlagano s strani Oliveire in Santhanama. Vključuje različne inovativne koncepte, kot je nova tehnika zagona za psevdodeterministične konstrukcije, ter kvalitativno izboljšanje okvira enakomerne trdnosti-naključnosti, ki sta ga predstavila Chen in Tell, s pomočjo variante generatorja Shaltiel-Umans.
 
