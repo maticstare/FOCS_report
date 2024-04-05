@@ -4,5 +4,4 @@
 !.gitignore
 !report.pdf
 !report.tex
-!graphs/
-!graphs/*
+!references.bib

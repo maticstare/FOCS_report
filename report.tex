@@ -23,8 +23,8 @@
 \geometry{top=1in, bottom=1in, left=1.5in, right=1.5in}
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{Matic Stare, Martin Starič, Veljko Dudić, Don Mohar, Matej Kovač, Rene Mlinarič and Žan Štuhec}
-\lhead{FOCS}
+%\rhead{Matic Stare, Martin Starič, Veljko Dudić, Don Mohar, Matej Kovač, Rene Mlinarič and Žan Štuhec}
+\lhead{FOCS: Annual IEEE Symposium on Foundations of Computer Science 2023}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
@@ -62,7 +62,7 @@
 
 \section{A Randomized Algorithm for Single-Source Shortest Path on Undirected Real-Weighted Graphs}
 
-Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(n^2)$, kjer je $n$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(n \log n + m)$, kjer je $m$ število povezav. V tem članku so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(m \sqrt{\log n * \log \log n})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. 
+Problem najkrajše poti je eden izmed najbolj znanih problemov v teoriji grafov. Cilj je, da najdemo najkrajšo pot med dvema vozliščema na podlagi uteženih grafov. Za reševanje tovrstnih problemov se je v preteklosti najbolj uveljavil Dijkstrin algoritem, ki deluje s časovno zahtevnostjo $O(n^2)$, kjer je $n$ število vozlišč. To mejo so kasneje izboljšali s Fibonaccijevo kopico na $O(n \log n + m)$, kjer je $m$ število povezav. V tem članku~\cite{duan2023randomized} so se avtorji osredotočili na problem najkrajše poti iz enega vira (SSSP) na uteženih grafih. Zasnovali so nov algoritem, ki deluje s časovno zahtevnostjo $O(m \sqrt{\log n * \log \log n})$, vendar je pogojen z verjetnostjo. To pomeni, da je časovna zahtevnost algoritma pričakovana in ne zahtevnost v najslabšem primeru. 
 
 Do nedavnega je bilo ozko grlo pri iskanju SSSP vrsta s prednostjo. Ideja izboljšave je, da v vrsto vnesemo manjše število vozlišč. To dosežemo s tehniko \textit{Bundle Construction}, ki deluje na sledeč način:
 \begin{itemize}
@@ -153,5 +153,9 @@ Pri barvanju določenih vrst grafov sledimo strategiji barvanja "torzij" enega z
 Za dodatno poenostavitev grafa uporabljamo tudi metode, kot sta particioniranje in plastenje, da ohranimo omejenost velikosti presečišč vsakega dela in vsake plasti. Namesto ustvarjanja omejenega grafa količnika drevesne širine, povzdignemo zaveso, da oblikujemo manjši G↑ (G minor) z omejeno drevesno širino. S tem zagotovimo, da G↑ ostane minor od G, s čimer dopolnimo dokazno strategijo za izrek 4.
 
 Naši rezultati ponujajo konstruktivne dokaze in algoritme polinomskega časa $O(n^c)$, neodvisne od izključenega minorja ali podgrafa, kar omogoča učinkovito obvladovanje K2,t-podgrafov. Izreka 1 in 2 zagotavljata optimalne meje za gručasto kromatsko število neminornih grafov Kh in Ks,t, poleg ključno razvitih definicij in orodij, kot so dekompozicije zavese, dvignjene zavese in kontrakcije. Pričakuje se, da bodo ta orodja uporabna v različnih kontekstih zaradi njihove učinkovitosti pri nadzoru K2,t-podgrafov.
+
+
+\bibliography{references}
+\bibliographystyle{plain}
 
 \end{document}
